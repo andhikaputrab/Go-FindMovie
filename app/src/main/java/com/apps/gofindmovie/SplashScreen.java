@@ -30,7 +30,7 @@ public class SplashScreen extends AppCompatActivity {
         bottomAnimation = AnimationUtils.loadAnimation(this,R.anim.bottom_animation);
 
         logo = findViewById(R.id.logo);
-        descLogo = findViewById(R.id.descLogo);
+        descLogo = findViewById(R.id.desc_logo);
 
         logo.setAnimation(topAnimation);
         descLogo.setAnimation(bottomAnimation);
