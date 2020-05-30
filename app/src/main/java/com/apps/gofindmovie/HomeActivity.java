@@ -15,13 +15,15 @@ public class HomeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
-        Button btnExit = findViewById(R.id.btn_exit);
+        /*/Button btnExit = findViewById(R.id.btn_exit);
         btnExit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 showDialog();
             }
-        });
+        });*/
+
+
     }
 
     private void showDialog(){

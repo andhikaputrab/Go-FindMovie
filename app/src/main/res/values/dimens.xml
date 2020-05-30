@@ -1,5 +1,6 @@
 <resources>
 
+    <dimen name="dimen0">0dp</dimen>
     <dimen name="dimen1">1dp</dimen>
     <dimen name="dimen2">2dp</dimen>
     <dimen name="dimen3">3dp</dimen>
@@ -64,6 +65,7 @@
     <dimen name="dimen142">142dp</dimen>
     <dimen name="dimen144">144dp</dimen>
     <dimen name="dimen150">150dp</dimen>
+    <dimen name="dimen160">160dp</dimen>
     <dimen name="dimen172">172dp</dimen>
     <dimen name="dimen180">180dp</dimen>
     <dimen name="dimen192">192dp</dimen>
@@ -163,5 +165,21 @@
     <dimen name="font324">324sp</dimen>
     <dimen name="font360">360sp</dimen>
     <dimen name="font450">400sp</dimen>
+
+    <dimen name="activity_horizontal_margin">@dimen/dimen16</dimen>
+    <dimen name="activity_vertical_margin">@dimen/dimen16</dimen>
+    <dimen name="movie_title_padding">@dimen/dimen10</dimen>
+    <dimen name="movie_title">@dimen/dimen15</dimen>
+    <dimen name="movie_cover_height">160dp</dimen>
+    <dimen name="card_movie_radius">0dp</dimen>
+    <dimen name="card_margin">@dimen/dimen5</dimen>
+    <dimen name="user_rating_padding_bottom">@dimen/dimen5</dimen>
+    <dimen name="user_rating">@dimen/dimen12</dimen>
+    <dimen name="detail_backdrop_height">500dp</dimen>
+    <dimen name="layout_margin_left">@dimen/dimen10</dimen>
+    <dimen name="layout_margin_top">@dimen/dimen3</dimen>
+    <dimen name="layout_margin_top2">@dimen/dimen10</dimen>
+    <dimen name="padding_layout">@dimen/dimen16</dimen>
+
 
 </resources>
