@@ -1,7 +1,12 @@
-package com.apps.gofindmovie;
+package com.apps.gofindmovie.SharedPreferences;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+
+/*
+    Created by Andhika Putra Bagaskara - 10117167 - IF5
+    on 27 may 2020
+ */
 
 public class SharedPreference {
 
@@ -14,19 +19,19 @@ public class SharedPreference {
     public SharedPreference() {
     }
 
-    static void setFirstTimeStatus(Boolean FirstLaunch, Context context){
+    public static void setFirstTimeStatus(Boolean FirstLaunch, Context context){
         sharedPreferences = context.getSharedPreferences(PREF_SESSION, Context.MODE_PRIVATE);
         editor =sharedPreferences.edit();
         editor.putBoolean(LAUNCH_STATUS, FirstLaunch);
         editor.apply();
     }
 
-    static boolean getFirstTimeStatus(Context context){
+    public static boolean getFirstTimeStatus(Context context){
         sharedPreferences = context.getSharedPreferences(PREF_SESSION, Context.MODE_PRIVATE);
         return sharedPreferences.getBoolean(LAUNCH_STATUS, false);
     }
 
-    static void setLogOut(Context context){
+    public static void setLogOut(Context context){
         sharedPreferences = context.getSharedPreferences(PREF_SESSION, Context.MODE_PRIVATE);
         editor = sharedPreferences.edit();
         editor.remove(LAUNCH_STATUS);

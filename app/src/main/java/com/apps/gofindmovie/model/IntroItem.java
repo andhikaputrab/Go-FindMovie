@@ -1,11 +1,16 @@
-package com.apps.gofindmovie;
+package com.apps.gofindmovie.model;
 
-public class ScreenItem {
+/*
+    Created by Andhika Putra Bagaskara - 10117167 - IF5
+    on 27 may 2020
+ */
+
+public class IntroItem {
 
     private String Title, Description;
     private int ScreenImg;
 
-    ScreenItem(String title, String description, int screenImg) {
+    public IntroItem(String title, String description, int screenImg) {
         Title = title;
         Description = description;
         ScreenImg = screenImg;

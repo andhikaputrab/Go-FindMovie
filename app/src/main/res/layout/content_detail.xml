@@ -6,13 +6,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:background="@android:color/white"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context=".DetailActivity"
+    tools:context=".Activity.DetailActivity"
     tools:showIn="@layout/activity_detail">
     
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:ignore="UselessParent">
+        tools:showIn="@layout/activity_detail">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -35,11 +35,12 @@
                 android:id="@+id/title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:gravity="center"
+                android:layout_marginStart="@dimen/dimen10"
                 android:layout_marginLeft="@dimen/dimen10"
-                android:padding="@dimen/padding_layout"
                 android:layout_marginTop="@dimen/dimen3"
-                android:textSize="@dimen/font20"
-                android:layout_marginStart="@dimen/dimen10"/>
+                android:padding="@dimen/padding_layout"
+                android:textSize="@dimen/font20" />
 
             <TextView
                 android:id="@+id/synopsis"
@@ -60,8 +61,10 @@
                 android:layout_marginLeft="@dimen/dimen10"
                 android:padding="@dimen/padding_layout"
                 android:layout_marginTop="@dimen/dimen3"
+                android:justificationMode="inter_word"
                 android:textSize="@dimen/font20"
-                android:layout_marginStart="@dimen/dimen10"/>
+                android:layout_marginStart="@dimen/dimen10"
+                tools:targetApi="o" />
 
             <TextView
                 android:id="@+id/rating"

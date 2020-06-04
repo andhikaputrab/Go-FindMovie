@@ -12,16 +12,21 @@ import androidx.annotation.NonNull;
 import androidx.viewpager.widget.PagerAdapter;
 
 import com.apps.gofindmovie.R;
-import com.apps.gofindmovie.ScreenItem;
+import com.apps.gofindmovie.model.IntroItem;
 
 import java.util.List;
+
+/*
+    Created by Andhika Putra Bagaskara - 10117167 - IF5
+    on 27 may 2020
+ */
 
 public class IntroViewPagerAdapter extends PagerAdapter {
 
     private Context context;
-    private List<ScreenItem> ListScreen;
+    private List<IntroItem> ListScreen;
 
-    public IntroViewPagerAdapter(Context context, List<ScreenItem> listScreen) {
+    public IntroViewPagerAdapter(Context context, List<IntroItem> listScreen) {
         this.context = context;
         ListScreen = listScreen;
     }

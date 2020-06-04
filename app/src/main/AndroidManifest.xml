@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.apps.gofindmovie">
+
+    <uses-permission android:name="android.permission.INTERNET"/>
 
     <application
         android:allowBackup="true"
@@ -9,11 +12,21 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".DetailActivity"/>
-        <activity android:name=".HomeActivity"/>
 
         <activity
-            android:name=".SplashScreen"
+            android:name=".Activity.DetailActivity"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:parentActivityName=".Activity.HomeActivity"
+            tools:targetApi="jelly_bean">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".Activity.HomeActivity"/>
+        </activity>
+
+        <activity android:name=".Activity.HomeActivity"/>
+
+        <activity
+            android:name=".Activity.SplashScreenActivity"
             android:theme="@style/ThemeNoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
@@ -22,7 +35,7 @@
         </activity>
 
         <activity
-            android:name=".IntroScreen"
+            android:name=".Activity.IntroActivity"
             android:theme="@style/ThemeNoActionBar"/>
 
         <meta-data
