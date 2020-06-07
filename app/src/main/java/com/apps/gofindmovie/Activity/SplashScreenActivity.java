@@ -1,4 +1,4 @@
-package com.apps.gofindmovie;
+package com.apps.gofindmovie.Activity;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -11,9 +11,15 @@ import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-public class SplashScreen extends AppCompatActivity {
+import com.apps.gofindmovie.R;
 
-    private static int SPLASH_TIME = 5000;
+/*
+    Created by Andhika Putra Bagaskara - 10117167 - IF5
+    on 26 may 2020
+ */
+public class SplashScreenActivity extends AppCompatActivity {
+
+    private int SPLASH_TIME = 5000;
 
     Animation topAnimation, bottomAnimation;
     ImageView logo;
@@ -38,7 +44,7 @@ public class SplashScreen extends AppCompatActivity {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                startActivity(new Intent(SplashScreen.this, IntroScreen.class));
+                startActivity(new Intent(SplashScreenActivity.this, IntroActivity.class));
                 finish();
             }
         }, SPLASH_TIME);

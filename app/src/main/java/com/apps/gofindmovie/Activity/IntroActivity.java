@@ -1,4 +1,4 @@
-package com.apps.gofindmovie;
+package com.apps.gofindmovie.Activity;
 
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
@@ -15,18 +15,20 @@ import android.view.animation.AnimationUtils;
 import android.widget.Button;
 
 import com.apps.gofindmovie.Adapter.IntroViewPagerAdapter;
+import com.apps.gofindmovie.R;
+import com.apps.gofindmovie.SharedPreferences.SharedPreference;
+import com.apps.gofindmovie.model.IntroItem;
 import com.google.android.material.tabs.TabLayout;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 /*
-    Developed by Andhika Putra Bagaskara - 10117167 - IF5
-    27 - 05 - 2020
+    Created by Andhika Putra Bagaskara - 10117167 - IF5
+    on 27 may 2020
  */
 
-public class IntroScreen extends AppCompatActivity {
+public class IntroActivity extends AppCompatActivity {
 
     private ViewPager introViewPager;
     private IntroViewPagerAdapter introViewPagerAdapter;
@@ -59,10 +61,10 @@ public class IntroScreen extends AppCompatActivity {
         btnStartAnimation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.button_animation);
 
         // fill list screen
-        final List<ScreenItem> listItem = new ArrayList<>();
-        listItem.add(new ScreenItem("Find Your Movie", "", R.drawable.welcome));
-        listItem.add(new ScreenItem("Bookmark Your Movie", "", R.drawable.ic_aboutme));
-        listItem.add(new ScreenItem("Let's Started!", "", R.drawable.ic_lets_start));
+        final List<IntroItem> listItem = new ArrayList<>();
+        listItem.add(new IntroItem("Find Your Movie", "", R.drawable.welcome));
+        listItem.add(new IntroItem("Bookmark Your Movie", "", R.drawable.ic_aboutme));
+        listItem.add(new IntroItem("Let's Started!", "", R.drawable.ic_lets_start));
 
         // setup ViewPager
         introViewPager = findViewById(R.id.intro_viewpager);
@@ -110,7 +112,7 @@ public class IntroScreen extends AppCompatActivity {
 
     private void goToHomeScreen(){
         SharedPreference.setFirstTimeStatus(true, getBaseContext());
-        startActivity(new Intent(IntroScreen.this, HomeActivity.class));
+        startActivity(new Intent(IntroActivity.this, HomeActivity.class));
         finish();
     }
 }

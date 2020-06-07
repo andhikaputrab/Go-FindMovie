@@ -2,8 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="vertical"
-    android:layout_width="match_parent"
+    android:layout_width="@dimen/dimen200"
     android:layout_height="wrap_content"
     android:adjustViewBounds="true">
 
@@ -11,34 +10,37 @@
         android:id="@+id/card_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_gravity="center"
         android:layout_margin="@dimen/dimen5"
         android:elevation="@dimen/dimen3"
         card_view:cardCornerRadius="@dimen/dimen0"
         tools:targetApi="lollipop">
 
         <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_width="@dimen/dimen180"
+            android:layout_height="match_parent"
+            android:layout_margin="@dimen/dimen5"
+            android:layout_gravity="center"
+            android:background="@color/viewBg2">
 
             <ImageView
                 android:id="@+id/thumbnail"
-                android:layout_width="match_parent"
+                android:layout_width="@dimen/dimen180"
                 android:layout_height="@dimen/dimen250"
                 android:background="?attr/selectableItemBackgroundBorderless"
                 android:scaleType="fitXY"
                 tools:ignore="ContentDescription" />
-            
+
             <TextView
                 android:id="@+id/title"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="@dimen/dimen47"
                 android:layout_below="@id/thumbnail"
                 android:paddingLeft="@dimen/dimen10"
                 android:paddingRight="@dimen/dimen10"
                 android:paddingTop="@dimen/dimen10"
-                android:textColor="@color/movie_title"
-                android:textSize="@dimen/font15"/>
+                android:textColor="@android:color/black"
+                android:textSize="@dimen/font15"
+                android:maxLength="32"/>
 
             <TextView
                 android:id="@+id/user_rating"
@@ -48,7 +50,7 @@
                 android:paddingLeft="@dimen/dimen10"
                 android:paddingRight="@dimen/dimen10"
                 android:paddingBottom="@dimen/dimen5"
-                android:textColor="@color/colorAccent"
+                android:textColor="@android:color/black"
                 android:textSize="@dimen/font12"/>
         </RelativeLayout>
     </androidx.cardview.widget.CardView>

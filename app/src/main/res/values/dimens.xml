@@ -40,6 +40,7 @@
     <dimen name="dimen44">44dp</dimen>
     <dimen name="dimen45">45dp</dimen>
     <dimen name="dimen46">46dp</dimen>
+    <dimen name="dimen47">47dp</dimen>
     <dimen name="dimen48">48dp</dimen>
     <dimen name="dimen50">50dp</dimen>
     <dimen name="dimen52">52dp</dimen>
@@ -66,6 +67,7 @@
     <dimen name="dimen144">144dp</dimen>
     <dimen name="dimen150">150dp</dimen>
     <dimen name="dimen160">160dp</dimen>
+    <dimen name="dimen170">170dp</dimen>
     <dimen name="dimen172">172dp</dimen>
     <dimen name="dimen180">180dp</dimen>
     <dimen name="dimen192">192dp</dimen>
@@ -123,6 +125,7 @@
     <dimen name="font44">44sp</dimen>
     <dimen name="font45">45sp</dimen>
     <dimen name="font46">46sp</dimen>
+    <dimen name="font47">47sp</dimen>
     <dimen name="font48">48sp</dimen>
     <dimen name="font50">50sp</dimen>
     <dimen name="font52">52sp</dimen>

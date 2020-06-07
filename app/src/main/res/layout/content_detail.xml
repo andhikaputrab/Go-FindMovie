@@ -2,17 +2,16 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:background="@android:color/white"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    android:background="@color/viewBg"
     tools:context=".Activity.DetailActivity"
     tools:showIn="@layout/activity_detail">
-    
-    <ScrollView
+
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:showIn="@layout/activity_detail">
+        android:layout_height="match_parent">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -23,21 +22,23 @@
                 android:id="@+id/movie_title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/dimen10"
+                android:layout_marginLeft="@dimen/dimen5"
+                android:layout_marginRight="@dimen/dimen5"
                 android:text="@string/movie_name"
+                android:textColor="@android:color/white"
                 android:gravity="center"
                 android:layout_marginTop="@dimen/dimen10"
                 android:textStyle="bold"
-                android:textSize="@dimen/font25"
-                android:layout_marginStart="@dimen/dimen10"/>
+                android:textSize="@dimen/font25"/>
 
             <TextView
                 android:id="@+id/title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:layout_marginStart="@dimen/dimen10"
-                android:layout_marginLeft="@dimen/dimen10"
+                android:textColor="@android:color/white"
+                android:layout_marginLeft="@dimen/dimen5"
+                android:layout_marginRight="@dimen/dimen5"
                 android:layout_marginTop="@dimen/dimen3"
                 android:padding="@dimen/padding_layout"
                 android:textSize="@dimen/font20" />
@@ -46,70 +47,84 @@
                 android:id="@+id/synopsis"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/dimen10"
+                android:layout_marginLeft="@dimen/dimen5"
+                android:layout_marginRight="@dimen/dimen5"
                 android:gravity="center"
                 android:text="@string/synopsis"
+                android:textColor="@android:color/white"
                 android:textSize="@dimen/font25"
                 android:textStyle="bold"
-                android:layout_marginTop="@dimen/dimen10"
-                android:layout_marginStart="@dimen/dimen10"/>
+                android:layout_marginTop="@dimen/dimen10"/>
 
             <TextView
                 android:id="@+id/plotSynopsis"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/dimen10"
+                android:layout_marginLeft="@dimen/dimen5"
+                android:layout_marginRight="@dimen/dimen5"
                 android:padding="@dimen/padding_layout"
+                android:textColor="@android:color/white"
                 android:layout_marginTop="@dimen/dimen3"
                 android:justificationMode="inter_word"
                 android:textSize="@dimen/font20"
-                android:layout_marginStart="@dimen/dimen10"
                 tools:targetApi="o" />
 
             <TextView
                 android:id="@+id/rating"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/dimen10"
+                android:layout_marginLeft="@dimen/dimen5"
+                android:layout_marginRight="@dimen/dimen5"
                 android:gravity="center"
                 android:text="@string/rating"
+                android:textColor="@android:color/white"
                 android:textSize="@dimen/font25"
                 android:textStyle="bold"
-                android:layout_marginTop="@dimen/dimen10"
-                android:layout_marginStart="@dimen/dimen10"/>
+                android:layout_marginTop="@dimen/dimen10"/>
 
             <TextView
                 android:id="@+id/user_rating"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/dimen10"
+                android:layout_marginLeft="@dimen/dimen5"
+                android:layout_marginRight="@dimen/dimen5"
                 android:padding="@dimen/padding_layout"
+                android:textColor="@android:color/white"
                 android:layout_marginTop="@dimen/dimen3"
                 android:textSize="@dimen/font20"
-                android:layout_marginStart="@dimen/dimen10"/>
+                android:gravity="center"/>
 
             <TextView
                 android:id="@+id/release"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/dimen10"
+                android:layout_marginLeft="@dimen/dimen5"
+                android:layout_marginRight="@dimen/dimen5"
                 android:gravity="center"
                 android:text="@string/release_date"
+                android:textColor="@android:color/white"
                 android:textSize="@dimen/font25"
                 android:textStyle="bold"
-                android:layout_marginTop="@dimen/dimen10"
-                android:layout_marginStart="@dimen/dimen10"/>
+                android:layout_marginTop="@dimen/dimen10"/>
 
             <TextView
                 android:id="@+id/release_date"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/dimen10"
+                android:layout_marginLeft="@dimen/dimen5"
+                android:layout_marginRight="@dimen/dimen5"
                 android:padding="@dimen/padding_layout"
+                android:textColor="@android:color/white"
                 android:layout_marginTop="@dimen/dimen3"
                 android:textSize="@dimen/font20"
-                android:layout_marginStart="@dimen/dimen10"/>
-        </LinearLayout>
-    </ScrollView>
+                android:gravity="center"/>
 
+            <View
+                android:id="@+id/divider"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dimen1"
+                android:background="@android:color/white" />
+        </LinearLayout>
+
+    </androidx.core.widget.NestedScrollView>
 </RelativeLayout>
