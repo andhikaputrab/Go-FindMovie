@@ -1,7 +1,9 @@
 package com.apps.gofindmovie.Activity;
 
 import android.app.ProgressDialog;
-import android.content.Intent;
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -11,6 +13,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
@@ -24,28 +27,50 @@ import com.apps.gofindmovie.api.Service;
 import com.apps.gofindmovie.model.Movie;
 import com.apps.gofindmovie.model.MovieResponse;
 
+import java.io.IOException;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
+import okhttp3.Cache;
+import okhttp3.Interceptor;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class HomeActivity extends AppCompatActivity {
+/*
+    Created by Andhika Putra Bagaskara - 10117167 - IF5
+    on 07 june 2020
+*/
+
+public class HomeActivity extends AppCompatActivity{
 
     private RecyclerView recyclerView, recyclerView2, recyclerView3;
     private HomeAdapter homeAdapter;
     private List<Movie> movieList;
     private ProgressDialog progressDialog;
     private SwipeRefreshLayout swipeRefreshLayout;
-    public static final String LOG_TAG = HomeAdapter.class.getName();
+    public static OkHttpClient okHttpClient;
+    private int cacheSize = 10 * 1024 * 1024;
+    public static Cache cache;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
+        Toolbar toolbar2 = findViewById(R.id.toolbar2);
+        setSupportActionBar(toolbar2);
         initViews();
+    }
+
+    private void initViews(){
+        progressDialog = new ProgressDialog(this);
+        progressDialog.setMessage("Fetching Movies");
+        progressDialog.setCancelable(false);
+        progressDialog.show();
 
         swipeRefreshLayout = findViewById(R.id.main_content);
         swipeRefreshLayout.setColorSchemeResources(android.R.color.holo_orange_dark);
@@ -56,13 +81,6 @@ public class HomeActivity extends AppCompatActivity {
                 Toast.makeText(HomeActivity.this, "Movies Refreshed", Toast.LENGTH_SHORT).show();
             }
         });
-    }
-
-    private void initViews(){
-        progressDialog = new ProgressDialog(this);
-        progressDialog.setMessage("Fetching Movies");
-        progressDialog.setCancelable(false);
-        progressDialog.show();
 
         recyclerView = findViewById(R.id.recycler_view);
         recyclerView2 = findViewById(R.id.recycler_view2);
@@ -101,9 +119,35 @@ public class HomeActivity extends AppCompatActivity {
         recyclerView2.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
         recyclerView3.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
 
+        cache = new Cache(getCacheDir(), cacheSize);
+
+        okHttpClient = new OkHttpClient.Builder()
+                .cache(cache)
+                .addInterceptor(new Interceptor() {
+                    @Override
+                    public okhttp3.Response intercept(Chain chain) throws IOException {
+                        Request request = chain.request();
+                        if (!isNetworkAvailable()){
+                            int maxStale = 60 * 60 * 24 * 28;
+                            request = request
+                                    .newBuilder()
+                                    .header("Cache-Control", "Public, only-if-cached, max-stale=" + maxStale)
+                                    .build();
+                        }
+                        return chain.proceed(request);
+                    }
+                }).build();
+
         loadJSONMostPopular();
         loadJSONTopRated();
         loadJSONUpcoming();
+    }
+
+    private boolean isNetworkAvailable(){
+        ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        assert connectivityManager != null;
+        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+        return activeNetworkInfo != null && activeNetworkInfo.isConnected();
     }
 
     private void loadJSONMostPopular(){
@@ -121,6 +165,7 @@ public class HomeActivity extends AppCompatActivity {
                 public void onResponse(Call<MovieResponse> call, Response<MovieResponse> response) {
                     assert response.body() != null;
                     List<Movie> movies = response.body().getResults();
+                    Collections.sort(movies, Movie.BY_NAME_ALPHABETICAL);
                     recyclerView.setAdapter(new HomeAdapter(getApplicationContext(), movies));
                     recyclerView.smoothScrollToPosition(0);
                     if (swipeRefreshLayout.isRefreshing()){
@@ -215,7 +260,8 @@ public class HomeActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_home, menu);
-        return true;
+
+        return super.onCreateOptionsMenu(menu);
     }
 
     @Override

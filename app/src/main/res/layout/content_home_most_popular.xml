@@ -13,7 +13,8 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/viewBg">
+        android:background="@drawable/bg_gradient_home"
+        tools:ignore="UselessParent">
 
             <TextView
                 android:id="@+id/text1"
@@ -23,8 +24,7 @@
                 android:textSize="@dimen/font28"
                 android:paddingLeft="@dimen/dimen5"
                 android:paddingRight="@dimen/dimen5"
-                android:textColor="@android:color/white"
-                android:background="@color/viewBg"/>
+                android:textColor="@android:color/white"/>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recycler_view"

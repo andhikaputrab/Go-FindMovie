@@ -3,6 +3,8 @@ package com.apps.gofindmovie.Adapter;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,6 +21,11 @@ import com.apps.gofindmovie.model.Movie;
 import com.bumptech.glide.Glide;
 
 import java.util.List;
+
+/*
+    Created by Andhika Putra Bagaskara - 10117167 - IF5
+    on 07 june 2020
+*/
 
 public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder> {
     private Context context;
@@ -71,21 +78,34 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder> {
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    int pos = getAdapterPosition();
-                    if (pos != RecyclerView.NO_POSITION){
-                        Movie selectedDataItem = movieList.get(pos);
-                        Intent intent = new Intent(context, DetailActivity.class);
-                        intent.putExtra("original_title", movieList.get(pos).getOriginalTitle());
-                        intent.putExtra("poster_path", movieList.get(pos).getPosterPath());
-                        intent.putExtra("overview", movieList.get(pos).getOverview());
-                        intent.putExtra("vote_average", Double.toString(movieList.get(pos).getVoteAverage()));
-                        intent.putExtra("release_date", movieList.get(pos).getReleaseDate());
-                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                        context.startActivity(intent);
-                        Toast.makeText(v.getContext(), selectedDataItem.getOriginalTitle(), Toast.LENGTH_SHORT).show();
+                    if (isNetworkAvailable()){
+                        int pos = getAdapterPosition();
+                        if (pos != RecyclerView.NO_POSITION){
+                            Movie selectedDataItem = movieList.get(pos);
+                            Intent intent = new Intent(context, DetailActivity.class);
+                            intent.putExtra("id", movieList.get(pos).getId());
+                            intent.putExtra("original_title", movieList.get(pos).getOriginalTitle());
+                            intent.putExtra("poster_path", movieList.get(pos).getPosterPath());
+                            intent.putExtra("overview", movieList.get(pos).getOverview());
+                            intent.putExtra("vote_average", Double.toString(movieList.get(pos).getVoteAverage()));
+                            intent.putExtra("release_date", movieList.get(pos).getReleaseDate());
+                            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                            context.startActivity(intent);
+                            Toast.makeText(v.getContext(), selectedDataItem.getOriginalTitle(), Toast.LENGTH_SHORT).show();
+                        }
+                    } else {
+                        Toast.makeText(context, "No Connection", Toast.LENGTH_SHORT).show();
                     }
+
                 }
             });
+        }
+
+        private boolean isNetworkAvailable(){
+            ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+            assert connectivityManager != null;
+            NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+            return activeNetworkInfo != null && activeNetworkInfo.isConnected();
         }
     }
 }

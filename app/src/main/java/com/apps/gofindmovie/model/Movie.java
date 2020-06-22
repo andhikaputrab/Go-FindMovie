@@ -3,6 +3,7 @@ package com.apps.gofindmovie.model;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 /*
@@ -41,7 +42,7 @@ public class Movie {
     @SerializedName("vote_average")
     private Double voteAverage;
 
-    public Movie(String posterPath, boolean adult, String overview, String releaseDate, List<Integer> genreIds, Integer id,
+    /*public Movie(String posterPath, boolean adult, String overview, String releaseDate, List<Integer> genreIds, Integer id,
                  String originalTitle, String originalLanguage, String title, String backdropPath, Double popularity,
                  Integer voteCount, boolean video, Double voteAverage) {
         this.posterPath = posterPath;
@@ -58,7 +59,14 @@ public class Movie {
         this.voteCount = voteCount;
         this.video = video;
         this.voteAverage = voteAverage;
-    }
+    }*/
+
+    public static final Comparator<Movie> BY_NAME_ALPHABETICAL = new Comparator<Movie>() {
+        @Override
+        public int compare(Movie o1, Movie o2) {
+            return o1.popularity.compareTo(o2.popularity);
+        }
+    };
 
     public String getPosterPath() {
         return "https://image.tmdb.org/t/p/w600_and_h900_bestv2" + posterPath;

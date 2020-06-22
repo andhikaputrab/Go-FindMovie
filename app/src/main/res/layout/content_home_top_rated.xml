@@ -7,14 +7,13 @@
     android:orientation="vertical"
     android:background="@android:color/white"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    android:layout_marginTop="@dimen/dimen16"
     tools:showIn="@layout/activity_home"
     tools:context=".Activity.HomeActivity">
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/viewBg">
+        android:background="@drawable/bg_gradient_home">
 
             <TextView
                 android:id="@+id/text2"
@@ -24,8 +23,7 @@
                 android:textSize="@dimen/font28"
                 android:textColor="@android:color/white"
                 android:paddingLeft="@dimen/dimen5"
-                android:paddingRight="@dimen/dimen5"
-                android:background="@color/viewBg"/>
+                android:paddingRight="@dimen/dimen5"/>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recycler_view2"
