@@ -31,6 +31,7 @@
             android:layout_height="wrap_content"
             android:clipToPadding="false"
             android:scrollbars="horizontal"
+            app:fastScrollEnabled="false"
             android:layout_below="@id/text2"/>
 
     </RelativeLayout>

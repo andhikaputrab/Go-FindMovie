@@ -160,6 +160,9 @@ public class HomeActivity extends AppCompatActivity{
 
             Service apiService = Client.getClient().create(Service.class);
             Call<MovieResponse> call = apiService.getPopularMovies(BuildConfig.THE_MOVIE_DB_API_KEY);
+            Call<MovieResponse> call2 = apiService.getTopRatedMovies(BuildConfig.THE_MOVIE_DB_API_KEY);
+            Call<MovieResponse> call3 = apiService.getUpcomingMovies(BuildConfig.THE_MOVIE_DB_API_KEY);
+
             call.enqueue(new Callback<MovieResponse>() {
                 @Override
                 public void onResponse(Call<MovieResponse> call, Response<MovieResponse> response) {
