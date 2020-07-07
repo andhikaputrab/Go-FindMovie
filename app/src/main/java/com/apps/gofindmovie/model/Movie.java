@@ -8,7 +8,7 @@ import java.util.List;
 
 /*
     Created by Andhika Putra Bagaskara - 10117167 - IF5
-    on 28 may 2020
+    on 08 june 2020
  */
 
 public class Movie {

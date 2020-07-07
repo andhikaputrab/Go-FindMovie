@@ -6,4 +6,10 @@
         android:title="@string/btnExit"
         android:orderInCategory="100"
         app:showAsAction="never"/>
+    <item
+        android:id="@+id/menu_search"
+        android:title="search"
+        android:icon="@drawable/ic_baseline_search_24"
+        app:showAsAction="ifRoom|collapseActionView"
+        app:actionViewClass="android.widget.SearchView" />
 </menu>
