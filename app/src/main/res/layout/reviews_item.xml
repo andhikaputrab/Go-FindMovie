@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:adjustViewBounds="true">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/viewBg">
+
+        <com.mikhaellopez.circularimageview.CircularImageView
+            android:id="@+id/circular_image"
+            android:layout_width="@dimen/dimen120"
+            android:layout_height="@dimen/dimen120"
+            android:layout_margin="@dimen/dimen10"
+            android:src="@drawable/user"
+            app:civ_background_color="@android:color/darker_gray"
+            app:civ_border_width="1dp" />
+
+        <TextView
+            android:id="@+id/text_author"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/dimen5"
+            android:layout_marginRight="@dimen/dimen5"
+            android:layout_marginTop="@dimen/dimen10"
+            android:layout_toRightOf="@+id/circular_image"
+            android:text="author"
+            android:textColor="@android:color/white"
+            android:textSize="@dimen/dimen28" />
+
+        <TextView
+            android:id="@+id/text_reviews"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/text_author"
+            android:layout_marginLeft="@dimen/dimen5"
+            android:layout_marginTop="@dimen/dimen3"
+            android:layout_marginRight="@dimen/dimen5"
+            android:layout_toRightOf="@+id/circular_image"
+            android:text="reviews"
+            android:textColor="@android:color/white"
+            android:textSize="@dimen/dimen22" />
+
+        <View
+            android:id="@+id/divider"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dimen2"
+            android:layout_below="@id/circular_image"
+            android:background="@android:color/white" />
+    </RelativeLayout>
+
+</LinearLayout>
