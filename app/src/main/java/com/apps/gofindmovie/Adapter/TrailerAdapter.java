@@ -68,7 +68,6 @@ public class TrailerAdapter extends RecyclerView.Adapter<TrailerAdapter.ViewHold
                         Trailer selectedDataItem = trailerList.get(pos);
                         String videoId = trailerList.get(pos).getKey();
                         Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.youtube.com/watch?v="+videoId));
-                        intent.putExtra("video_id", videoId);
                         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                         context.startActivity(intent);
                         Toast.makeText(v.getContext(), "You Watched Trailer : " + selectedDataItem.getName(), Toast.LENGTH_SHORT).show();

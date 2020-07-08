@@ -44,19 +44,6 @@
                 android:textSize="@dimen/font20"
                 tools:targetApi="o" />
 
-            <TextView
-                android:id="@+id/rating"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/dimen5"
-                android:layout_marginRight="@dimen/dimen5"
-                android:gravity="center"
-                android:text="@string/rating"
-                android:textColor="@android:color/white"
-                android:textSize="@dimen/font25"
-                android:textStyle="bold"
-                android:layout_marginTop="@dimen/dimen10"/>
-
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recycler_view_genre"
                 android:layout_width="wrap_content"
