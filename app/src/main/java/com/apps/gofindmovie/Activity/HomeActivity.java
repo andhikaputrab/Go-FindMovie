@@ -72,16 +72,6 @@ public class HomeActivity extends AppCompatActivity{
         progressDialog.setCancelable(false);
         progressDialog.show();
 
-        swipeRefreshLayout = findViewById(R.id.main_content);
-        swipeRefreshLayout.setColorSchemeResources(android.R.color.holo_orange_dark);
-        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                initViews();
-                Toast.makeText(HomeActivity.this, "Movies Refreshed", Toast.LENGTH_SHORT).show();
-            }
-        });
-
         recyclerView = findViewById(R.id.recycler_view);
         recyclerView2 = findViewById(R.id.recycler_view2);
         recyclerView3 = findViewById(R.id.recycler_view3);
@@ -171,9 +161,7 @@ public class HomeActivity extends AppCompatActivity{
                     Collections.sort(movies, Movie.BY_NAME_ALPHABETICAL);
                     recyclerView.setAdapter(new HomeAdapter(getApplicationContext(), movies));
                     recyclerView.smoothScrollToPosition(0);
-                    if (swipeRefreshLayout.isRefreshing()){
-                        swipeRefreshLayout.setRefreshing(false);
-                    }
+
                     progressDialog.dismiss();
                 }
 
@@ -207,9 +195,7 @@ public class HomeActivity extends AppCompatActivity{
                     List<Movie> movies = response.body().getResults();
                     recyclerView2.setAdapter(new HomeAdapter(getApplicationContext(), movies));
                     recyclerView2.smoothScrollToPosition(0);
-                    if (swipeRefreshLayout.isRefreshing()){
-                        swipeRefreshLayout.setRefreshing(false);
-                    }
+
                     progressDialog.dismiss();
                 }
 
@@ -242,9 +228,7 @@ public class HomeActivity extends AppCompatActivity{
                     List<Movie> movies = response.body().getResults();
                     recyclerView3.setAdapter(new HomeAdapter(getApplicationContext(), movies));
                     recyclerView3.smoothScrollToPosition(0);
-                    if (swipeRefreshLayout.isRefreshing()){
-                        swipeRefreshLayout.setRefreshing(false);
-                    }
+
                     progressDialog.dismiss();
                 }
 
@@ -270,10 +254,6 @@ public class HomeActivity extends AppCompatActivity{
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()){
-            /*case R.id.menu_settings:
-                Intent intent = new Intent(this, SettingsActivity.class);
-                startActivity(intent);
-                return true;*/
             case R.id.menu_exit:
                 showDialog();
             default:
@@ -309,39 +289,4 @@ public class HomeActivity extends AppCompatActivity{
         // menampilkan alert dialog
         alertDialog.show();
     }
-
-    /*@Override
-    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-        Log.d(LOG_TAG, "Preferences Updated");
-        checkSortOrder();
-    }
-
-    private void checkSortOrder(){
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-        String sortOrder = sharedPreferences.getString(
-                this.getString(R.string.sort_order_key),
-                this.getString(R.string.sort_by_most_popular)
-        );
-
-        if (sortOrder.equals(this.getString(R.string.sort_by_most_popular))){
-            Log.d(LOG_TAG, "Sorting by Most Popular Movies");
-            loadJSON();
-
-        } else if (sortOrder.equals(this.getString(R.string.sort_by_top_rated))){
-            Log.d(LOG_TAG, "Sorting by Top Rated Movies");
-            loadJSONTopRated();
-
-        } else {
-            Log.d(LOG_TAG, "Sorting by Upcoming Movies");
-            loadJSONUpcoming();
-        }
-    }
-
-    @Override
-    public void onResume(){
-        super.onResume();
-        if (movieList.isEmpty()){
-            checkSortOrder();
-        }
-    }*/
 }
