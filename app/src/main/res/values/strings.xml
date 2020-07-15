@@ -1,6 +1,5 @@
 <resources>
     <string name="app_name">Go!FindMovie</string>
-    <string name="splashscreen1">Developed By Andhika Putra Bagaskara</string>
 
     <string name="btnNext">Next</string>
     <string name="btnStart">Get Started</string>

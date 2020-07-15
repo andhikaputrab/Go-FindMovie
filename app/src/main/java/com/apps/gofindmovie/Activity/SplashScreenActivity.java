@@ -19,11 +19,8 @@ import com.apps.gofindmovie.R;
  */
 public class SplashScreenActivity extends AppCompatActivity {
 
-    private int SPLASH_TIME = 5000;
-
     Animation topAnimation, bottomAnimation;
     ImageView logo;
-    TextView descLogo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,10 +35,7 @@ public class SplashScreenActivity extends AppCompatActivity {
         bottomAnimation = AnimationUtils.loadAnimation(this,R.anim.bottom_animation);
 
         logo = findViewById(R.id.logo);
-        descLogo = findViewById(R.id.desc_logo);
-
         logo.setAnimation(topAnimation);
-        descLogo.setAnimation(bottomAnimation);
 
         new Handler().postDelayed(new Runnable() {
             @Override
@@ -49,6 +43,6 @@ public class SplashScreenActivity extends AppCompatActivity {
                 startActivity(new Intent(SplashScreenActivity.this, IntroActivity.class));
                 finish();
             }
-        }, SPLASH_TIME);
+        }, 3000);
     }
 }
