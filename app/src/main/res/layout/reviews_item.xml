@@ -6,15 +6,23 @@
     android:orientation="vertical"
     android:adjustViewBounds="true">
 
+    <View
+        android:id="@+id/divider"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dimen2"
+        android:background="@android:color/white"
+        android:layout_marginTop="@dimen/dimen5"/>
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/viewBg">
+        android:background="@color/viewBg"
+        android:paddingTop="@dimen/dimen4">
 
         <com.mikhaellopez.circularimageview.CircularImageView
             android:id="@+id/circular_image"
-            android:layout_width="@dimen/dimen120"
-            android:layout_height="@dimen/dimen120"
+            android:layout_width="@dimen/dimen80"
+            android:layout_height="@dimen/dimen80"
             android:layout_margin="@dimen/dimen10"
             android:src="@drawable/user"
             app:civ_background_color="@android:color/darker_gray"
@@ -25,12 +33,14 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/dimen5"
-            android:layout_marginRight="@dimen/dimen5"
             android:layout_marginTop="@dimen/dimen10"
+            android:layout_marginRight="@dimen/dimen5"
             android:layout_toRightOf="@+id/circular_image"
             android:text="author"
             android:textColor="@android:color/white"
-            android:textSize="@dimen/dimen28" />
+            android:textSize="@dimen/font28"
+            app:fontFamily="@font/artifika"
+            android:layout_toEndOf="@+id/circular_image" />
 
         <TextView
             android:id="@+id/text_reviews"
@@ -38,19 +48,14 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/text_author"
             android:layout_marginLeft="@dimen/dimen5"
-            android:layout_marginTop="@dimen/dimen3"
+            android:layout_marginTop="@dimen/dimen8"
             android:layout_marginRight="@dimen/dimen5"
             android:layout_toRightOf="@+id/circular_image"
             android:text="reviews"
             android:textColor="@android:color/white"
-            android:textSize="@dimen/dimen22" />
+            android:textSize="@dimen/font19"
+            android:layout_toEndOf="@+id/circular_image" />
 
-        <View
-            android:id="@+id/divider"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/dimen2"
-            android:layout_below="@id/circular_image"
-            android:background="@android:color/white" />
     </RelativeLayout>
 
 </LinearLayout>

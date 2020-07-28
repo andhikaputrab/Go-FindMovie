@@ -11,7 +11,7 @@ public class ReviewsResponse {
     @SerializedName("page")
     private Integer page;
     @SerializedName("results")
-    List<Reviews> results;
+    private List<Reviews> results;
     @SerializedName("total_pages")
     private Integer totalPages;
     @SerializedName("total_results")

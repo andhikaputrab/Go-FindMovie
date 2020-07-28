@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.apps.gofindmovie.Adapter.ActorAdapter;
+import com.apps.gofindmovie.Adapter.ReviewsAdapter;
 import com.apps.gofindmovie.Adapter.TrailerAdapter;
 import com.apps.gofindmovie.BuildConfig;
 import com.apps.gofindmovie.R;
@@ -22,6 +23,8 @@ import com.apps.gofindmovie.api.Client;
 import com.apps.gofindmovie.api.Service;
 import com.apps.gofindmovie.model.Actors;
 import com.apps.gofindmovie.model.ActorsResponse;
+import com.apps.gofindmovie.model.Reviews;
+import com.apps.gofindmovie.model.ReviewsResponse;
 import com.apps.gofindmovie.model.Trailer;
 import com.apps.gofindmovie.model.TrailerResponse;
 import com.bumptech.glide.Glide;
@@ -49,11 +52,7 @@ public class DetailActivity extends AppCompatActivity {
 
     private TextView movieTitle, movieSynopsis, userRating, movieReleaseDate;
     private ImageView imageView;
-    private RecyclerView recyclerViewTrailer, recyclerViewActor;
-    private TrailerAdapter trailerAdapter;
-    private List<Trailer> trailerList;
-    private List<Actors> actorsList;
-    private ActorAdapter actorAdapter;
+    private RecyclerView recyclerViewTrailer, recyclerViewActor, recyclerViewReviews;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -109,30 +108,23 @@ public class DetailActivity extends AppCompatActivity {
     private void initViews(){
         recyclerViewTrailer = findViewById(R.id.recycler_view_trailer);
         recyclerViewActor = findViewById(R.id.recycler_view_actors);
-
-        trailerList = new ArrayList<>();
-        trailerAdapter = new TrailerAdapter(this, trailerList);
-
-        actorsList = new ArrayList<>();
-        actorAdapter = new ActorAdapter(this, actorsList);
+        recyclerViewReviews = findViewById(R.id.recycler_view_reviews);
 
         recyclerViewTrailer.setLayoutManager(new GridLayoutManager(getApplicationContext(), 2));
         recyclerViewActor.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
-
-        recyclerViewTrailer.setAdapter(trailerAdapter);
-        recyclerViewActor.setAdapter(actorAdapter);
+        recyclerViewReviews.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
 
         loadJSON();
     }
 
     private void loadJSON(){
         int movie_id = Objects.requireNonNull(getIntent().getExtras()).getInt("id");
+
         try {
-            Service apiService = Client.getClient().create(Service.class);
-            Call<TrailerResponse> call = apiService.getMoviesTrailer(movie_id, BuildConfig.THE_MOVIE_DB_API_KEY);
-            Call<ActorsResponse> call2 = apiService.getActorsDetails(movie_id, BuildConfig.THE_MOVIE_DB_API_KEY);
+            Service apiService = Client.getClient(getApplicationContext()).create(Service.class);
 
             // JSON Trailer Movies
+            Call<TrailerResponse> call = apiService.getMoviesTrailer(movie_id, BuildConfig.THE_MOVIE_DB_API_KEY);
             call.enqueue(new Callback<TrailerResponse>() {
                 @Override
                 public void onResponse(@NotNull Call<TrailerResponse> call, @NotNull Response<TrailerResponse> response) {
@@ -150,6 +142,7 @@ public class DetailActivity extends AppCompatActivity {
             });
 
             // JSON Movies Actors
+            Call<ActorsResponse> call2 = apiService.getActorsDetails(movie_id, BuildConfig.THE_MOVIE_DB_API_KEY);
             call2.enqueue(new Callback<ActorsResponse>() {
                 @Override
                 public void onResponse(@NotNull Call<ActorsResponse> call2, @NotNull Response<ActorsResponse> response) {
@@ -163,6 +156,24 @@ public class DetailActivity extends AppCompatActivity {
                 public void onFailure(@NotNull Call<ActorsResponse> call2, @NotNull Throwable t) {
                     Log.d("Error", Objects.requireNonNull(t.getMessage()));
                     Toast.makeText(DetailActivity.this, "Error Fetching Data!", Toast.LENGTH_SHORT).show();
+                }
+            });
+
+            // JSON Movies Reviews
+            Call<ReviewsResponse> call3 = apiService.getMoviesReviews(movie_id, BuildConfig.THE_MOVIE_DB_API_KEY);
+            call3.enqueue(new Callback<ReviewsResponse>() {
+                @Override
+                public void onResponse(@NotNull Call<ReviewsResponse> call, @NotNull Response<ReviewsResponse> response) {
+                    assert response.body() != null;
+                    List<Reviews> reviews = response.body().getResults();
+                    recyclerViewReviews.setAdapter(new ReviewsAdapter(getApplicationContext(), reviews));
+                    recyclerViewReviews.smoothScrollToPosition(0);
+                }
+
+                @Override
+                public void onFailure(@NotNull Call<ReviewsResponse> call, @NotNull Throwable t) {
+                    Log.d("Error", Objects.requireNonNull(t.getMessage()));
+                    Toast.makeText(DetailActivity.this, t.getMessage(), Toast.LENGTH_SHORT).show();
                 }
             });
 

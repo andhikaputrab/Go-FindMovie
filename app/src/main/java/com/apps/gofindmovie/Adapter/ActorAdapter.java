@@ -1,16 +1,20 @@
 package com.apps.gofindmovie.Adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.apps.gofindmovie.Activity.DetailActors;
 import com.apps.gofindmovie.R;
 import com.apps.gofindmovie.model.Actors;
+import com.apps.gofindmovie.model.InfoActors;
 import com.bumptech.glide.Glide;
 import com.mikhaellopez.circularimageview.CircularImageView;
 
@@ -56,7 +60,7 @@ public class ActorAdapter extends RecyclerView.Adapter<ActorAdapter.ViewHolder> 
         return actorsList.size();
     }
 
-    public static class ViewHolder extends RecyclerView.ViewHolder {
+    public class ViewHolder extends RecyclerView.ViewHolder {
         TextView actorName,character;
         CircularImageView actorImage;
 
@@ -66,6 +70,21 @@ public class ActorAdapter extends RecyclerView.Adapter<ActorAdapter.ViewHolder> 
             actorName = itemView.findViewById(R.id.text_actor_name);
             actorImage = itemView.findViewById(R.id.image_actor);
             character = itemView.findViewById(R.id.text_character);
+
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    int pos = getAdapterPosition();
+                    if (pos != RecyclerView.NO_POSITION){
+                        Actors selectedDataItem = actorsList.get(pos);
+                        Intent intent = new Intent(context, DetailActors.class);
+                        intent.putExtra("id", actorsList.get(pos).getId());
+                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        context.startActivity(intent);
+                        Toast.makeText(v.getContext(), selectedDataItem.getName(), Toast.LENGTH_SHORT).show();
+                    }
+                }
+            });
         }
     }
 }

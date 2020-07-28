@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#ffffff">
+    android:background="#F1F1F1">
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline"
@@ -23,7 +23,7 @@
         android:layout_marginRight="16dp"
         android:text="TextView"
         android:textColor="@color/intro_title_color"
-        android:textSize="@dimen/font32"
+        android:textSize="@dimen/font30"
         android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/guideline"
         app:layout_constraintEnd_toEndOf="parent"
@@ -34,6 +34,7 @@
         android:id="@+id/intro_description"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:textSize="@dimen/font20"
         android:text="TextView"
         android:gravity="center"
         android:lineSpacingExtra="@dimen/dimen16"
@@ -56,5 +57,9 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         tools:srcCompat="@tools:sample/avatars"
-        tools:ignore="ContentDescription" />
+        tools:ignore="ContentDescription"
+        android:background="#F1F1F1"
+        android:backgroundTint="#F1F1F1"
+        tools:targetApi="lollipop" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

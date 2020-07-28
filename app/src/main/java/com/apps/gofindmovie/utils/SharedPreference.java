@@ -1,4 +1,4 @@
-package com.apps.gofindmovie.SharedPreferences;
+package com.apps.gofindmovie.utils;
 
 import android.content.Context;
 import android.content.SharedPreferences;

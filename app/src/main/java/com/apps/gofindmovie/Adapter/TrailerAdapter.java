@@ -52,13 +52,11 @@ public class TrailerAdapter extends RecyclerView.Adapter<TrailerAdapter.ViewHold
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         public TextView trailerTitle;
-        public CardView imageTrailer;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
 
             trailerTitle = itemView.findViewById(R.id.trailer_title);
-            imageTrailer = itemView.findViewById(R.id.card_view_trailer);
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override

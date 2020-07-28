@@ -1,6 +1,7 @@
 package com.apps.gofindmovie.api;
 
 import com.apps.gofindmovie.model.ActorsResponse;
+import com.apps.gofindmovie.model.InfoActors;
 import com.apps.gofindmovie.model.MovieResponse;
 import com.apps.gofindmovie.model.ReviewsResponse;
 import com.apps.gofindmovie.model.TrailerResponse;
@@ -18,13 +19,13 @@ import retrofit2.http.Query;
 public interface Service {
 
     @GET("movie/popular")
-    Call<MovieResponse> getPopularMovies(@Query("api_key") String apiKey);
+    Call<MovieResponse> getPopularMovies(@Query("api_key") String apiKey, @Query("page") int pageIndex);
 
     @GET("movie/top_rated")
-    Call<MovieResponse> getTopRatedMovies(@Query("api_key") String apiKey);
+    Call<MovieResponse> getTopRatedMovies(@Query("api_key") String apiKey, @Query("page") int pageIndex);
 
     @GET("movie/upcoming")
-    Call<MovieResponse> getUpcomingMovies(@Query("api_key") String apiKey);
+    Call<MovieResponse> getUpcomingMovies(@Query("api_key") String apiKey, @Query("page") int pageIndex);
 
     @GET("movie/{movie_id}/credits")
     Call<ActorsResponse> getActorsDetails(@Path("movie_id") int movie_id, @Query("api_key") String apiKey);
@@ -32,4 +33,9 @@ public interface Service {
     @GET("movie/{movie_id}/videos")
     Call<TrailerResponse> getMoviesTrailer(@Path("movie_id") int id, @Query("api_key") String apiKey);
 
+    @GET("movie/{movie_id}/reviews")
+    Call<ReviewsResponse> getMoviesReviews(@Path("movie_id") int id, @Query("api_key") String apiKey);
+
+    @GET("person/{person_id}")
+    Call<InfoActors> getInfoActors(@Path("person_id") int id, @Query("api_key") String apiKey);
 }

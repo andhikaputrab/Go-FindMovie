@@ -1,6 +1,5 @@
 package com.apps.gofindmovie.Adapter;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
@@ -24,12 +23,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
-/*
-    Created by Andhika Putra Bagaskara - 10117167 - IF5
-    on 07 june 2020
-*/
-
-public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder> {
+public class HomeAdapter3 extends RecyclerView.Adapter<HomeAdapter3.ViewHolder> {
     private Context context;
     private List<Movie> movieList;
 
@@ -37,14 +31,14 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder> {
     private static final int LOADING = 1;
     private boolean isLoadingAdded = false;
 
-    public HomeAdapter(Context context, List<Movie> movieList) {
+    public HomeAdapter3(Context context, List<Movie> movieList) {
         this.context = context;
         this.movieList = movieList;
     }
 
     @NonNull
     @Override
-    public HomeAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public HomeAdapter3.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         ViewHolder viewHolder = null;
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
 
@@ -62,10 +56,8 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder> {
         return viewHolder;
     }
 
-    @SuppressLint("CheckResult")
     @Override
-    public void onBindViewHolder(@NonNull HomeAdapter.ViewHolder holder, int position) {
-
+    public void onBindViewHolder(@NonNull HomeAdapter3.ViewHolder holder, int position) {
         switch (getItemViewType(position)){
             case ITEM:
                 holder.title.setText(movieList.get(position).getOriginalTitle());
@@ -94,7 +86,7 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder> {
         return (position == movieList.size() - 1 && isLoadingAdded) ? LOADING : ITEM;
     }
 
-    /*
+        /*
    Helpers
    _________________________________________________________________________________________________
     */
@@ -131,12 +123,13 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder> {
         return movieList.get(position);
     }
 
-    class ViewHolder extends RecyclerView.ViewHolder {
 
-        final TextView title, userRating;
-        final ImageView thumbnail;
 
-        ViewHolder(@NonNull View itemView) {
+    public class ViewHolder extends RecyclerView.ViewHolder {
+        TextView title, userRating;
+        ImageView thumbnail;
+
+        public ViewHolder(@NonNull View itemView) {
             super(itemView);
 
             title = itemView.findViewById(R.id.title);
@@ -168,12 +161,12 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder> {
                 }
             });
         }
+    }
 
-        private boolean isNetworkAvailable(){
-            ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
-            assert connectivityManager != null;
-            NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
-            return activeNetworkInfo != null && activeNetworkInfo.isConnected();
-        }
+    private boolean isNetworkAvailable(){
+        ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        assert connectivityManager != null;
+        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+        return activeNetworkInfo != null && activeNetworkInfo.isConnected();
     }
 }

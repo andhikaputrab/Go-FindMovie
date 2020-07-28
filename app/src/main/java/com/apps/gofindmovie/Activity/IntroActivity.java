@@ -16,7 +16,7 @@ import androidx.viewpager.widget.ViewPager;
 
 import com.apps.gofindmovie.Adapter.IntroViewPagerAdapter;
 import com.apps.gofindmovie.R;
-import com.apps.gofindmovie.SharedPreferences.SharedPreference;
+import com.apps.gofindmovie.utils.SharedPreference;
 import com.apps.gofindmovie.model.IntroItem;
 import com.google.android.material.tabs.TabLayout;
 
@@ -62,9 +62,9 @@ public class IntroActivity extends AppCompatActivity {
 
         // fill list screen
         final List<IntroItem> listItem = new ArrayList<>();
-        listItem.add(new IntroItem("Find Your Movie", "", R.drawable.welcome));
-        listItem.add(new IntroItem("Bookmark Your Movie", "", R.drawable.ic_aboutme));
-        listItem.add(new IntroItem("Let's Started!", "", R.drawable.ic_lets_start));
+        listItem.add(new IntroItem("Find Your Movie", "Temukan Movie Yang Anda Cari", R.drawable.movie_logo));
+        listItem.add(new IntroItem("Look Movie Information", "Lihatlah Informasi Movie Anda", R.drawable.movie));
+        listItem.add(new IntroItem("Let's Started!", "", R.drawable.start));
 
         // setup ViewPager
         introViewPager = findViewById(R.id.intro_viewpager);

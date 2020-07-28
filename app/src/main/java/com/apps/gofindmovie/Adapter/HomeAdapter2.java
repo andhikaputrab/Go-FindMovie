@@ -24,12 +24,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
-/*
-    Created by Andhika Putra Bagaskara - 10117167 - IF5
-    on 07 june 2020
-*/
-
-public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder> {
+public class HomeAdapter2 extends RecyclerView.Adapter<HomeAdapter2.ViewHolder> {
     private Context context;
     private List<Movie> movieList;
 
@@ -37,14 +32,14 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder> {
     private static final int LOADING = 1;
     private boolean isLoadingAdded = false;
 
-    public HomeAdapter(Context context, List<Movie> movieList) {
+    public HomeAdapter2(Context context, List<Movie> movieList) {
         this.context = context;
         this.movieList = movieList;
     }
 
     @NonNull
     @Override
-    public HomeAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public HomeAdapter2.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         ViewHolder viewHolder = null;
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
 
@@ -64,7 +59,7 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder> {
 
     @SuppressLint("CheckResult")
     @Override
-    public void onBindViewHolder(@NonNull HomeAdapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull HomeAdapter2.ViewHolder holder, int position) {
 
         switch (getItemViewType(position)){
             case ITEM:
@@ -131,7 +126,7 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder> {
         return movieList.get(position);
     }
 
-    class ViewHolder extends RecyclerView.ViewHolder {
+    public class ViewHolder extends RecyclerView.ViewHolder {
 
         final TextView title, userRating;
         final ImageView thumbnail;

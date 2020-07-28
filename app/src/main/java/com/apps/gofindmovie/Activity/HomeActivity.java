@@ -5,6 +5,7 @@ import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -16,26 +17,25 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.apps.gofindmovie.Adapter.HomeAdapter;
+import com.apps.gofindmovie.Adapter.HomeAdapter2;
+import com.apps.gofindmovie.Adapter.HomeAdapter3;
 import com.apps.gofindmovie.BuildConfig;
 import com.apps.gofindmovie.R;
-import com.apps.gofindmovie.SharedPreferences.SharedPreference;
 import com.apps.gofindmovie.api.Client;
 import com.apps.gofindmovie.api.Service;
 import com.apps.gofindmovie.model.Movie;
 import com.apps.gofindmovie.model.MovieResponse;
+import com.apps.gofindmovie.utils.PaginationScrollListener;
+import com.apps.gofindmovie.utils.SharedPreference;
 
-import java.io.IOException;
-import java.util.Collections;
+import org.jetbrains.annotations.NotNull;
+
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-import okhttp3.Cache;
-import okhttp3.Interceptor;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -48,13 +48,18 @@ import retrofit2.Response;
 public class HomeActivity extends AppCompatActivity{
 
     private RecyclerView recyclerView, recyclerView2, recyclerView3;
+    private LinearLayoutManager linearLayoutManager, linearLayoutManager2, linearLayoutManager3;
     private HomeAdapter homeAdapter;
-    private List<Movie> movieList;
+    private HomeAdapter2 homeAdapter2;
+    private HomeAdapter3 homeAdapter3;
     private ProgressDialog progressDialog;
-    private SwipeRefreshLayout swipeRefreshLayout;
-    public static OkHttpClient okHttpClient;
-    private int cacheSize = 10 * 1024 * 1024;
-    public static Cache cache;
+    private List<Movie> movieList, movieList2, movieList3;
+
+    private boolean isLoading = false;
+    private boolean isLastPage = false;
+
+    private int TOTAL_PAGES = 10;
+    private int currentPage = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,6 +68,7 @@ public class HomeActivity extends AppCompatActivity{
 
         Toolbar toolbar2 = findViewById(R.id.toolbar2);
         setSupportActionBar(toolbar2);
+
         initViews();
     }
 
@@ -76,63 +82,112 @@ public class HomeActivity extends AppCompatActivity{
         recyclerView2 = findViewById(R.id.recycler_view2);
         recyclerView3 = findViewById(R.id.recycler_view3);
 
-        /*movieList = new ArrayList<>();
+        movieList = new ArrayList<>();
+        movieList2 = new ArrayList<>();
+        movieList3 = new ArrayList<>();
         homeAdapter = new HomeAdapter(this, movieList);
-        recyclerViewTopRatedAdapter = new RecyclerViewTopRatedAdapter(this, movieList);
+        homeAdapter2 = new HomeAdapter2(this, movieList2);
+        homeAdapter3 = new HomeAdapter3(this, movieList3);
 
-        if (getBaseContext().getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT){
-            recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
-        } else {
-            recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
-        }
+        linearLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
+        linearLayoutManager2 = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
+        linearLayoutManager3 = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
+        recyclerView.setLayoutManager(linearLayoutManager);
+        recyclerView2.setLayoutManager(linearLayoutManager2);
+        recyclerView3.setLayoutManager(linearLayoutManager3);
 
-        /*if (getBaseContext().getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT){
-            recyclerView2.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
-        } else {
-            recyclerView2.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
-        }
+        recyclerView.addOnScrollListener(new PaginationScrollListener(linearLayoutManager) {
+            @Override
+            protected void loadMoreItems() {
+                isLoading = true;
+                currentPage += 1;
 
-        recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
-        recyclerView2.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
-
-        recyclerView.setItemAnimator(new DefaultItemAnimator());
-        recyclerView.setAdapter(homeAdapter);
-        homeAdapter.notifyDataSetChanged();
-        loadJSONMostPopular();
-
-        recyclerView2.setItemAnimator(new DefaultItemAnimator());
-        recyclerView2.setAdapter(recyclerViewTopRatedAdapter);
-        recyclerViewTopRatedAdapter.notifyDataSetChanged();
-        loadJSONTopRated();*/
-
-        recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
-        recyclerView2.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
-        recyclerView3.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
-
-        cache = new Cache(getCacheDir(), cacheSize);
-
-        okHttpClient = new OkHttpClient.Builder()
-                .cache(cache)
-                .addInterceptor(new Interceptor() {
+                new Handler().postDelayed(new Runnable() {
                     @Override
-                    public okhttp3.Response intercept(Chain chain) throws IOException {
-                        Request request = chain.request();
-                        if (!isNetworkAvailable()){
-                            int maxStale = 60 * 60 * 24 * 28;
-                            request = request
-                                    .newBuilder()
-                                    .header("Cache-Control", "Public, only-if-cached, max-stale=" + maxStale)
-                                    .build();
-                        }
-                        return chain.proceed(request);
+                    public void run() {
+                        loadNextPage();
                     }
-                }).build();
+                }, 1000);
+            }
 
-        loadJSONMostPopular();
-        loadJSONTopRated();
-        loadJSONUpcoming();
+            @Override
+            public int getTotalPageCount() {
+                return TOTAL_PAGES;
+            }
+
+            @Override
+            public boolean isLastPage() {
+                return isLastPage;
+            }
+
+            @Override
+            public boolean isLoading() {
+                return isLoading;
+            }
+        });
+
+        recyclerView2.addOnScrollListener(new PaginationScrollListener(linearLayoutManager2) {
+            @Override
+            protected void loadMoreItems() {
+                isLoading = true;
+                currentPage += 1;
+
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        loadNextPage2();
+                    }
+                }, 1000);
+            }
+
+            @Override
+            public int getTotalPageCount() {
+                return TOTAL_PAGES;
+            }
+
+            @Override
+            public boolean isLastPage() {
+                return isLastPage;
+            }
+
+            @Override
+            public boolean isLoading() {
+                return isLoading;
+            }
+        });
+
+        recyclerView3.addOnScrollListener(new PaginationScrollListener(linearLayoutManager3) {
+            @Override
+            protected void loadMoreItems() {
+                isLoading = true;
+                currentPage += 1;
+
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        loadNextPage3();
+                    }
+                },1000);
+            }
+
+            @Override
+            public int getTotalPageCount() {
+                return TOTAL_PAGES;
+            }
+
+            @Override
+            public boolean isLastPage() {
+                return isLastPage;
+            }
+
+            @Override
+            public boolean isLoading() {
+                return isLoading;
+            }
+        });
+
+        loadJSON();
     }
-
     private boolean isNetworkAvailable(){
         ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         assert connectivityManager != null;
@@ -140,33 +195,85 @@ public class HomeActivity extends AppCompatActivity{
         return activeNetworkInfo != null && activeNetworkInfo.isConnected();
     }
 
-    private void loadJSONMostPopular(){
+    private void loadJSON(){
         try {
-            if (BuildConfig.THE_MOVIE_DB_API_KEY.isEmpty()){
-                Toast.makeText(getApplicationContext(), "Please obtain your API Key firstly from themoviedb.org", Toast.LENGTH_SHORT).show();
-                progressDialog.dismiss();
-                return;
-            }
+            Service apiService = Client.getClient(getApplicationContext()).create(Service.class);
 
-            Service apiService = Client.getClient().create(Service.class);
-            Call<MovieResponse> call = apiService.getPopularMovies(BuildConfig.THE_MOVIE_DB_API_KEY);
-            Call<MovieResponse> call2 = apiService.getTopRatedMovies(BuildConfig.THE_MOVIE_DB_API_KEY);
-            Call<MovieResponse> call3 = apiService.getUpcomingMovies(BuildConfig.THE_MOVIE_DB_API_KEY);
-
+            // JSON Popular Movies
+            Call<MovieResponse> call = apiService.getPopularMovies(BuildConfig.THE_MOVIE_DB_API_KEY, currentPage);
             call.enqueue(new Callback<MovieResponse>() {
                 @Override
-                public void onResponse(Call<MovieResponse> call, Response<MovieResponse> response) {
+                public void onResponse(@NotNull Call<MovieResponse> call, @NotNull Response<MovieResponse> response) {
                     assert response.body() != null;
                     List<Movie> movies = response.body().getResults();
-                    Collections.sort(movies, Movie.BY_NAME_ALPHABETICAL);
-                    recyclerView.setAdapter(new HomeAdapter(getApplicationContext(), movies));
-                    recyclerView.smoothScrollToPosition(0);
+
+                    recyclerView.setAdapter(homeAdapter);
+                    homeAdapter.addAll(movies);
+                    if (currentPage <= TOTAL_PAGES) {
+                        homeAdapter.addLoadingFooter();
+                    }
+                    else {
+                        isLastPage = true;
+                    }
 
                     progressDialog.dismiss();
                 }
 
                 @Override
-                public void onFailure(Call<MovieResponse> call, Throwable t) {
+                public void onFailure(@NotNull Call<MovieResponse> call, @NotNull Throwable t) {
+                    Log.d("Error", Objects.requireNonNull(t.getMessage()));
+                    Toast.makeText(HomeActivity.this, "Error Fetching Data!", Toast.LENGTH_SHORT).show();
+                }
+            });
+
+            // JSON Top Rated Movies
+            Call<MovieResponse> call2 = apiService.getTopRatedMovies(BuildConfig.THE_MOVIE_DB_API_KEY,currentPage);
+            call2.enqueue(new Callback<MovieResponse>() {
+                @Override
+                public void onResponse(@NotNull Call<MovieResponse> call, @NotNull Response<MovieResponse> response) {
+                    assert response.body() != null;
+                    List<Movie> movies2 = response.body().getResults();
+
+                    recyclerView2.setAdapter(homeAdapter2);
+                    homeAdapter2.addAll(movies2);
+                    if (currentPage <= TOTAL_PAGES) {
+                        homeAdapter2.addLoadingFooter();
+                    }
+                    else {
+                        isLastPage = true;
+                    }
+
+                    progressDialog.dismiss();
+                }
+
+                @Override
+                public void onFailure(@NotNull Call<MovieResponse> call, @NotNull Throwable t) {
+                    Log.d("Error", Objects.requireNonNull(t.getMessage()));
+                    Toast.makeText(HomeActivity.this, "Error Fetching Data!", Toast.LENGTH_SHORT).show();
+                }
+            });
+
+            // JSON UpComing Movies
+            Call<MovieResponse> call3 = apiService.getUpcomingMovies(BuildConfig.THE_MOVIE_DB_API_KEY,currentPage);
+            call3.enqueue(new Callback<MovieResponse>() {
+                @Override
+                public void onResponse(@NotNull Call<MovieResponse> call, @NotNull Response<MovieResponse> response) {
+                    assert response.body() != null;
+                    List<Movie> movies3 = response.body().getResults();
+
+                    recyclerView3.setAdapter(homeAdapter3);
+                    homeAdapter3.addAll(movies3);
+                    if (currentPage <= TOTAL_PAGES){
+                        homeAdapter3.addLoadingFooter();
+                    } else {
+                        isLastPage = true;
+                    }
+
+                    progressDialog.dismiss();
+                }
+
+                @Override
+                public void onFailure(@NotNull Call<MovieResponse> call, @NotNull Throwable t) {
                     Log.d("Error", Objects.requireNonNull(t.getMessage()));
                     Toast.makeText(HomeActivity.this, "Error Fetching Data!", Toast.LENGTH_SHORT).show();
                 }
@@ -175,72 +282,128 @@ public class HomeActivity extends AppCompatActivity{
             Log.d("Error", Objects.requireNonNull(e.getMessage()));
             Toast.makeText(this, e.toString(), Toast.LENGTH_SHORT).show();
         }
-
     }
 
-    private void loadJSONTopRated(){
-        try {
-            if (BuildConfig.THE_MOVIE_DB_API_KEY.isEmpty()){
-                Toast.makeText(getApplicationContext(), "Please obtain your API Key firstly from themoviedb.org", Toast.LENGTH_SHORT).show();
-                progressDialog.dismiss();
-                return;
+    private void loadNextPage(){
+        if (isNetworkAvailable()){
+            try {
+                Service apiService = Client.getClient(getApplicationContext()).create(Service.class);
+                Call<MovieResponse> call = apiService.getPopularMovies(BuildConfig.THE_MOVIE_DB_API_KEY, currentPage);
+
+                // JSON MOST POPULAR MOVIES
+                call.enqueue(new Callback<MovieResponse>() {
+                    @Override
+                    public void onResponse(@NotNull Call<MovieResponse> call, @NotNull Response<MovieResponse> response) {
+                        homeAdapter.removeLoadingFooter();
+                        isLoading = false;
+
+                        assert response.body() != null;
+                        List<Movie> movies = response.body().getResults();
+                        homeAdapter.addAll(movies);
+                        if (currentPage <= TOTAL_PAGES) {
+                            homeAdapter.addLoadingFooter();
+                        }
+                        else {
+                            isLastPage = true;
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(@NotNull Call<MovieResponse> call, @NotNull Throwable t) {
+                        Log.e("Error", Objects.requireNonNull(t.getMessage()));
+                        Toast.makeText(HomeActivity.this, "Error Fetching Data!", Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+            }catch (Exception e){
+                Log.d("Error", Objects.requireNonNull(e.getMessage()));
+                Toast.makeText(this, e.toString(), Toast.LENGTH_SHORT).show();
             }
-
-            Service apiService = Client.getClient().create(Service.class);
-            Call<MovieResponse> call = apiService.getTopRatedMovies(BuildConfig.THE_MOVIE_DB_API_KEY);
-            call.enqueue(new Callback<MovieResponse>() {
-                @Override
-                public void onResponse(Call<MovieResponse> call, Response<MovieResponse> response) {
-                    assert response.body() != null;
-                    List<Movie> movies = response.body().getResults();
-                    recyclerView2.setAdapter(new HomeAdapter(getApplicationContext(), movies));
-                    recyclerView2.smoothScrollToPosition(0);
-
-                    progressDialog.dismiss();
-                }
-
-                @Override
-                public void onFailure(Call<MovieResponse> call, Throwable t) {
-                    Log.d("Error", Objects.requireNonNull(t.getMessage()));
-                    Toast.makeText(HomeActivity.this, "Error Fetching Data!", Toast.LENGTH_SHORT).show();
-                }
-            });
-        }catch (Exception e){
-            Log.d("Error", Objects.requireNonNull(e.getMessage()));
-            Toast.makeText(this, e.toString(), Toast.LENGTH_SHORT).show();
+        } else {
+            Log.d("Error", "No Internet Connection");
+            Toast.makeText(getApplicationContext(), "No Internet Connection", Toast.LENGTH_SHORT).show();
         }
     }
 
-    private void loadJSONUpcoming(){
-        try {
-            if (BuildConfig.THE_MOVIE_DB_API_KEY.isEmpty()){
-                Toast.makeText(getApplicationContext(), "Please obtain your API Key firstly from themoviedb.org", Toast.LENGTH_SHORT).show();
-                progressDialog.dismiss();
-                return;
+    private void loadNextPage2(){
+        if (isNetworkAvailable()){
+            try {
+                Service apiService = Client.getClient(getApplicationContext()).create(Service.class);
+                Call<MovieResponse> call2 = apiService.getTopRatedMovies(BuildConfig.THE_MOVIE_DB_API_KEY,currentPage);
+
+                // JSON MOST POPULAR MOVIES
+                call2.enqueue(new Callback<MovieResponse>() {
+                    @Override
+                    public void onResponse(@NotNull Call<MovieResponse> call, @NotNull Response<MovieResponse> response) {
+                        homeAdapter2.removeLoadingFooter();
+                        isLoading = false;
+
+                        assert response.body() != null;
+                        List<Movie> movies = response.body().getResults();
+                        homeAdapter2.addAll(movies);
+                        if (currentPage <= TOTAL_PAGES) {
+                            homeAdapter2.addLoadingFooter();
+                        }
+                        else {
+                            isLastPage = true;
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(@NotNull Call<MovieResponse> call, @NotNull Throwable t) {
+                        Log.e("Error", Objects.requireNonNull(t.getMessage()));
+                        Toast.makeText(HomeActivity.this, "Error Fetching Data!", Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+            }catch (Exception e){
+                Log.d("Error", Objects.requireNonNull(e.getMessage()));
+                Toast.makeText(this, e.toString(), Toast.LENGTH_SHORT).show();
             }
+        } else {
+            Log.d("Error", "No Internet Connection");
+            Toast.makeText(getApplicationContext(), "No Internet Connection", Toast.LENGTH_SHORT).show();
+        }
+    }
 
-            Service apiService = Client.getClient().create(Service.class);
-            Call<MovieResponse> call = apiService.getUpcomingMovies(BuildConfig.THE_MOVIE_DB_API_KEY);
-            call.enqueue(new Callback<MovieResponse>() {
-                @Override
-                public void onResponse(Call<MovieResponse> call, Response<MovieResponse> response) {
-                    assert response.body() != null;
-                    List<Movie> movies = response.body().getResults();
-                    recyclerView3.setAdapter(new HomeAdapter(getApplicationContext(), movies));
-                    recyclerView3.smoothScrollToPosition(0);
+    private void loadNextPage3(){
+        if (isNetworkAvailable()){
+            try {
+                Service apiService = Client.getClient(getApplicationContext()).create(Service.class);
+                Call<MovieResponse> call2 = apiService.getUpcomingMovies(BuildConfig.THE_MOVIE_DB_API_KEY,currentPage);
 
-                    progressDialog.dismiss();
-                }
+                // JSON MOST POPULAR MOVIES
+                call2.enqueue(new Callback<MovieResponse>() {
+                    @Override
+                    public void onResponse(@NotNull Call<MovieResponse> call, @NotNull Response<MovieResponse> response) {
+                        homeAdapter3.removeLoadingFooter();
+                        isLoading = false;
 
-                @Override
-                public void onFailure(Call<MovieResponse> call, Throwable t) {
-                    Log.d("Error", Objects.requireNonNull(t.getMessage()));
-                    Toast.makeText(HomeActivity.this, "Error Fetching Data!", Toast.LENGTH_SHORT).show();
-                }
-            });
-        }catch (Exception e){
-            Log.d("Error", Objects.requireNonNull(e.getMessage()));
-            Toast.makeText(this, e.toString(), Toast.LENGTH_SHORT).show();
+                        assert response.body() != null;
+                        List<Movie> movies = response.body().getResults();
+                        homeAdapter3.addAll(movies);
+                        if (currentPage <= TOTAL_PAGES) {
+                            homeAdapter3.addLoadingFooter();
+                        }
+                        else {
+                            isLastPage = true;
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(@NotNull Call<MovieResponse> call, @NotNull Throwable t) {
+                        Log.e("Error", Objects.requireNonNull(t.getMessage()));
+                        Toast.makeText(HomeActivity.this, "Error Fetching Data!", Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+            }catch (Exception e){
+                Log.d("Error", Objects.requireNonNull(e.getMessage()));
+                Toast.makeText(this, e.toString(), Toast.LENGTH_SHORT).show();
+            }
+        } else {
+            Log.d("Error", "No Internet Connection");
+            Toast.makeText(getApplicationContext(), "No Internet Connection", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -253,12 +416,10 @@ public class HomeActivity extends AppCompatActivity{
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        switch (item.getItemId()){
-            case R.id.menu_exit:
-                showDialog();
-            default:
-                return super.onOptionsItemSelected(item);
+        if (item.getItemId() == R.id.menu_exit) {
+            showDialog();
         }
+        return super.onOptionsItemSelected(item);
     }
 
     private void showDialog(){

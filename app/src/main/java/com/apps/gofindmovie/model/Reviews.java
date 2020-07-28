@@ -9,16 +9,9 @@ public class Reviews {
     @SerializedName("content")
     private String content;
     @SerializedName("id")
-    private int idReviews;
+    private String idReviews;
     @SerializedName("url")
     private String url;
-
-    public Reviews(String author, String content, int idReviews, String url) {
-        this.author = author;
-        this.content = content;
-        this.idReviews = idReviews;
-        this.url = url;
-    }
 
     public String getAuthor() {
         return author;
@@ -36,11 +29,11 @@ public class Reviews {
         this.content = content;
     }
 
-    public int getId() {
+    public String getId() {
         return idReviews;
     }
 
-    public void setId(int idReviews) {
+    public void setId(String idReviews) {
         this.idReviews = idReviews;
     }
 
