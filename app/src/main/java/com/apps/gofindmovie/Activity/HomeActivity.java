@@ -58,7 +58,7 @@ public class HomeActivity extends AppCompatActivity{
     private boolean isLoading = false;
     private boolean isLastPage = false;
 
-    private int TOTAL_PAGES = 10;
+    private int TOTAL_PAGES = 20;
     private int currentPage = 1;
 
     @Override
